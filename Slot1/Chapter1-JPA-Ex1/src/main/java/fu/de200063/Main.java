@@ -1,11 +1,12 @@
 package fu.de200063;
 
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.printf("Hello and welcome!");
-
-        for (int i = 1; i <= 5; i++) {
-            System.out.println("i = " + i);
-        }
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hsf302FU");
+        System.out.println("EMF tao thanh cong!");
+        emf.close();
     }
 }
