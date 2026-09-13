@@ -1,0 +1,38 @@
+# ==========================================
+# Document & Guide Files (Đề bài & Hướng dẫn)
+# ==========================================
+*.docx
+*.doc
+*.pdf
+~$*.docx
+~$*.doc
+*_guide.md
+*guide*.md
+GIT_CONVENTIONS.docx
+
+# ==========================================
+# IntelliJ IDEA & IDE Settings
+# ==========================================
+.idea/
+**/.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ==========================================
+# Build Outputs & Bytecode (Maven & Gradle)
+# ==========================================
+target/
+**/target/
+build/
+**/build/
+.gradle/
+*.class
+*.log
+
+# ==========================================
+# OS Generated Files
+# ==========================================
+.DS_Store
+Thumbs.db

@@ -2,31 +2,32 @@ package fu.de200063;
 
 import fu.de200063.dao.EmployeeDAO;
 import fu.de200063.pojo.Employee;
-import fu.de200063.pojo.Gender;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         EmployeeDAO dao = new EmployeeDAO();
 
-        // ===== CREATE (TODO 0.3) =====
-        Employee emp = new Employee("Tran Van B", "b@fpt.edu.vn",
-                new BigDecimal("20000000.00"), Gender.FEMALE, LocalDate.of(2021, 5, 15));
-        dao.save(emp);
-        System.out.println(">> [TODO 0.3] Đã tạo thành công: " + emp);
+        // ===== READ CÓ ĐIỀU KIỆN (TODO 0.5) =====
+        System.out.println("========== TEST TODO 0.5: JPQL QUERIES ==========");
 
-        // ===== READ (TODO 0.4) =====
-        // 1. Test findById
-        Employee found = dao.findById(emp.getId());
-        System.out.println(">> [TODO 0.4] Đọc theo ID (" + emp.getId() + "): " + found);
+        // 1. Tìm theo Email
+        String searchEmail = "a@fpt.edu.vn";
+        Employee empByEmail = dao.findByEmail(searchEmail);
+        System.out.println(">> Tìm theo email (" + searchEmail + "): " + empByEmail);
 
-        // 2. Test findAll
-        List<Employee> list = dao.findAll();
-        System.out.println(">> [TODO 0.4] Danh sách tất cả nhân viên (size = " + list.size() + "):");
-        for (Employee e : list) {
+        // 2. Tìm theo Email không tồn tại (Kiểm tra xử lý danh sách rỗng, không bị văng Exception)
+        String notFoundEmail = "notfound@fpt.edu.vn";
+        Employee empNotFound = dao.findByEmail(notFoundEmail);
+        System.out.println(">> Tìm theo email không tồn tại (" + notFoundEmail + "): " + empNotFound);
+
+        // 3. Tìm nhân viên có lương > 14.000.000 và đang active = true
+        BigDecimal minSalary = new BigDecimal("14000000.00");
+        List<Employee> highSalaryList = dao.findBySalaryGreaterThanAndActive(minSalary);
+        System.out.println(">> Danh sách nhân viên lương > " + minSalary + " & active (size = " + highSalaryList.size() + "):");
+        for (Employee e : highSalaryList) {
             System.out.println("   - " + e);
         }
     }
