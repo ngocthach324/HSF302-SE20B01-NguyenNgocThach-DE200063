@@ -2,33 +2,40 @@ package fu.de200063;
 
 import fu.de200063.dao.EmployeeDAO;
 import fu.de200063.pojo.Employee;
+import fu.de200063.pojo.Gender;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
         EmployeeDAO dao = new EmployeeDAO();
 
-        // ===== READ CÓ ĐIỀU KIỆN (TODO 0.5) =====
-        System.out.println("========== TEST TODO 0.5: JPQL QUERIES ==========");
+        System.out.println("========== TEST TODO 0.6: UPDATE EMPLOYEE ==========");
 
-        // 1. Tìm theo Email
-        String searchEmail = "a@fpt.edu.vn";
-        Employee empByEmail = dao.findByEmail(searchEmail);
-        System.out.println(">> Tìm theo email (" + searchEmail + "): " + empByEmail);
-
-        // 2. Tìm theo Email không tồn tại (Kiểm tra xử lý danh sách rỗng, không bị văng Exception)
-        String notFoundEmail = "notfound@fpt.edu.vn";
-        Employee empNotFound = dao.findByEmail(notFoundEmail);
-        System.out.println(">> Tìm theo email không tồn tại (" + notFoundEmail + "): " + empNotFound);
-
-        // 3. Tìm nhân viên có lương > 14.000.000 và đang active = true
-        BigDecimal minSalary = new BigDecimal("14000000.00");
-        List<Employee> highSalaryList = dao.findBySalaryGreaterThanAndActive(minSalary);
-        System.out.println(">> Danh sách nhân viên lương > " + minSalary + " & active (size = " + highSalaryList.size() + "):");
-        for (Employee e : highSalaryList) {
-            System.out.println("   - " + e);
+        // 1. Đảm bảo có 1 nhân viên để test update (tìm nhân viên id=1, nếu chưa có thì tạo)
+        Employee found = dao.findById(1L);
+        if (found == null) {
+            found = new Employee("Nguyen Van A", "a@fpt.edu.vn",
+                    new BigDecimal("15000000.00"), Gender.MALE, LocalDate.of(2022, 3, 1));
+            dao.save(found);
+            System.out.println(">> Chưa có nhân viên, đã tạo mới: " + found);
+        } else {
+            System.out.println(">> Nhân viên ban đầu trước khi sửa: " + found);
         }
+
+        // 2. Thay đổi mức lương
+        BigDecimal newSalary = new BigDecimal("18500000.00");
+        found.setSalary(newSalary);
+        System.out.println(">> Đã sửa salary trên RAM thành: " + newSalary);
+
+        // 3. Gọi hàm update() trong DAO
+        Employee updated = dao.update(found);
+        System.out.println(">> Kết quả trả về sau khi dao.update(): " + updated);
+
+        // 4. Đọc lại từ CSDL bằng findById để kiểm chứng dữ liệu đã lưu xuống DB
+        Employee reChecked = dao.findById(found.getId());
+        System.out.println(">> Đọc lại từ DB sau update: " + reChecked);
+        System.out.println(">> Kiểm tra lương trong DB có khớp: " + (reChecked.getSalary().compareTo(newSalary) == 0));
     }
 }

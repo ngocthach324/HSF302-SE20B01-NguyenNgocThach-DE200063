@@ -78,4 +78,23 @@ public class EmployeeDAO {
             em.close();
         }
     }
+
+    // ---------- UPDATE (TODO 0.6) ----------
+    public Employee update(Employee e) {
+        // [Lifecycle] e truyền vào có thể đang ở trạng thái DETACHED
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Employee merged = em.merge(e); // merge() TRẢ VỀ một entity MANAGED mới trong session này
+            em.getTransaction().commit();
+            return merged; // Nên dùng đối tượng merged này tiếp theo
+        } catch (RuntimeException ex) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw ex;
+        } finally {
+            em.close(); // sau dòng này, merged trở thành DETACHED
+        }
+    }
 }
