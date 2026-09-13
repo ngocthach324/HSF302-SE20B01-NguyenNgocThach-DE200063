@@ -97,4 +97,24 @@ public class EmployeeDAO {
             em.close(); // sau dòng này, merged trở thành DETACHED
         }
     }
+
+    // ---------- DELETE (TODO 0.7) ----------
+    public void delete(Long id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Employee e = em.find(Employee.class, id); // 1. e tìm thấy là MANAGED
+            if (e != null) {
+                em.remove(e); // 2. -> e chuyển sang trạng thái REMOVED, sẽ bị DELETE khi commit
+            }
+            em.getTransaction().commit(); // 3. Thực thi câu lệnh SQL DELETE
+        } catch (RuntimeException ex) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw ex;
+        } finally {
+            em.close();
+        }
+    }
 }
