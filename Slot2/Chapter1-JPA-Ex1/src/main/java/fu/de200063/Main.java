@@ -11,22 +11,39 @@ public class Main {
     public static void main(String[] args) {
         EmployeeDAO dao = new EmployeeDAO();
 
-        System.out.println("========== TEST TODO 0.7: DELETE EMPLOYEE ==========");
+        // Dọn dẹp dữ liệu cũ nếu đã tồn tại từ lần test trước để chạy demo trơn tru
+        Employee oldEmp = dao.findByEmail("a@fpt.edu.vn");
+        if (oldEmp != null) {
+            dao.delete(oldEmp.getId());
+        }
 
-        // 1. Tạo 1 nhân viên tạm để test xoá
-        Employee tempEmp = new Employee("Le Van Can Xoa", "temp.delete@fpt.edu.vn",
-                new BigDecimal("12000000.00"), Gender.OTHER, LocalDate.now());
-        dao.save(tempEmp);
-        System.out.println(">> Đã tạo nhân viên tạm: " + tempEmp);
-        Long targetId = tempEmp.getId();
+        System.out.println("========== TODO 0.8: DEMO LUỒNG CRUD TUẦN TỰ ==========");
 
-        // 2. Thực hiện xoá theo ID
-        dao.delete(targetId);
-        System.out.println(">> Đã gọi dao.delete(" + targetId + ")");
+        // ===== 1. CREATE =====
+        Employee emp = new Employee("Nguyen Van A", "a@fpt.edu.vn",
+                new BigDecimal("15000000.00"), Gender.MALE, LocalDate.of(2022, 3, 1));
+        dao.save(emp);
+        System.out.println("1. [CREATE] Đã tạo nhân viên: " + emp);
 
-        // 3. Tìm lại để kiểm chứng nhân viên đã bị xoá thật sự khỏi CSDL
-        Employee afterDelete = dao.findById(targetId);
-        System.out.println(">> Tìm lại nhân viên sau khi xoá: " + afterDelete); // Kỳ vọng: null
-        System.out.println(">> Kiểm tra xoá thành công (afterDelete == null): " + (afterDelete == null));
+        // ===== 2. READ =====
+        Employee found = dao.findById(emp.getId());
+        System.out.println("2. [READ] Đọc lại nhân viên theo ID (" + emp.getId() + "): " + found);
+
+        // ===== 3. UPDATE =====
+        found.setSalary(new BigDecimal("17000000.00"));
+        Employee updated = dao.update(found);
+        System.out.println("3. [UPDATE] Sau khi cập nhật lương: " + updated);
+
+        // ===== 4. READ LẠI ĐỂ KIỂM CHỨNG =====
+        Employee reChecked = dao.findById(emp.getId());
+        System.out.println("4. [RE-CHECK] Đọc lại từ DB sau update: " + reChecked);
+
+        // ===== 5. DELETE =====
+        dao.delete(emp.getId());
+        System.out.println("5. [DELETE] Đã xoá nhân viên ID: " + emp.getId());
+
+        // ===== 6. READ LẠI ĐỂ KIỂM CHỨNG ĐÃ XOÁ =====
+        Employee afterDelete = dao.findById(emp.getId());
+        System.out.println("6. [RE-CHECK] Tìm lại sau khi xoá: " + afterDelete); // Kỳ vọng: null
     }
 }
