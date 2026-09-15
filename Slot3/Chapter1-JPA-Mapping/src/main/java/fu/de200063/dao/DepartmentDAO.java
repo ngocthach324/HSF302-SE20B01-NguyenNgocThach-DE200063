@@ -78,4 +78,28 @@ public class DepartmentDAO {
             em.close();
         }
     }
+
+    public Department findByIdWithEmployees(Long id) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            List<Department> results = em.createQuery(
+                    "SELECT d FROM Department d JOIN FETCH d.employees WHERE d.id = :id", Department.class)
+                    .setParameter("id", id)
+                    .getResultList();
+            return results.isEmpty() ? null : results.get(0);
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Department> findAllWithEmployees() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT DISTINCT d FROM Department d JOIN FETCH d.employees", Department.class)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }
