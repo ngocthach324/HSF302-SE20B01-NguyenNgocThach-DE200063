@@ -1,42 +1,31 @@
 package fu.de200063;
 
-import fu.de200063.dao.DepartmentDAO;
 import fu.de200063.pojo.Department;
 import fu.de200063.pojo.Employee;
-import fu.de200063.pojo.Gender;
 import fu.de200063.util.JPAUtil;
+import jakarta.persistence.EntityManager;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        DepartmentDAO departmentDAO = new DepartmentDAO();
+        EntityManager em = JPAUtil.getEntityManager();
 
-        Department it = new Department("Marketing", "Ha Noi");
-        Employee e1 = new Employee("aa.nguyen@company.com", "Nguyen Van A", Gender.MALE,
-                new BigDecimal("15000000"), LocalDate.of(2022, 1, 10));
-        Employee e2 = new Employee("bb.tran@company.com", "Tran Thi B", Gender.FEMALE,
-                new BigDecimal("18000000"), LocalDate.of(2021, 6, 1));
-        Employee e3 = new Employee("cc.le@company.com", "Le Van C", Gender.OTHER,
-                new BigDecimal("12000000"), LocalDate.of(2023, 3, 15));
+        System.out.println("========== TODO 2.8: TAI HIEN N+1 QUERY PROBLEM ==========");
 
-        it.addEmployee(e1);
-        it.addEmployee(e2);
-        it.addEmployee(e3);
+        List<Department> departments = em.createQuery("SELECT d FROM Department d", Department.class)
+                .getResultList();
 
-        departmentDAO.save(it);
-        System.out.println(">> Da luu Department thanh cong, ID = " + it.getId());
+        System.out.println(">> So luong phong ban lay duoc: " + departments.size());
 
-        Department found = departmentDAO.findByIdWithEmployees(it.getId());
-        if (found != null) {
-            System.out.println(">> Phong ban: " + found.getName() + " (" + found.getLocation() + ")");
-            System.out.println(">> Danh sach " + found.getEmployees().size() + " nhan vien:");
-            for (Employee e : found.getEmployees()) {
-                System.out.println("   - " + e);
+        for (Department d : departments) {
+            System.out.println(">> Phong ban: " + d.getName() + " - So nhan vien: " + d.getEmployees().size());
+            for (Employee e : d.getEmployees()) {
+                System.out.println("   - " + e.getFullName() + " (" + e.getEmail() + ")");
             }
         }
 
+        em.close();
         JPAUtil.close();
     }
 }
