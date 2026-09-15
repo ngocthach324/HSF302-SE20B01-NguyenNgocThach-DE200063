@@ -36,6 +36,11 @@ public class Employee {
 
     private boolean active;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", nullable = false)
+    @ToString.Exclude
+    private Department department;
+
     @Transient
     private int yearsOfService;
 
