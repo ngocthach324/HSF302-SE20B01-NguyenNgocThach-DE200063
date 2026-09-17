@@ -1,20 +1,19 @@
 package fu.de200063;
 
+import fu.de200063.dao.DepartmentDAO;
 import fu.de200063.pojo.Department;
 import fu.de200063.pojo.Employee;
 import fu.de200063.util.JPAUtil;
-import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        EntityManager em = JPAUtil.getEntityManager();
+        DepartmentDAO departmentDAO = new DepartmentDAO();
 
-        System.out.println("========== TODO 2.8: TAI HIEN N+1 QUERY PROBLEM ==========");
+        System.out.println("========== TODO 2.9: FIX N+1 QUERY VOI JOIN FETCH ==========");
 
-        List<Department> departments = em.createQuery("SELECT d FROM Department d", Department.class)
-                .getResultList();
+        List<Department> departments = departmentDAO.findAllWithEmployees();
 
         System.out.println(">> So luong phong ban lay duoc: " + departments.size());
 
@@ -25,7 +24,6 @@ public class Main {
             }
         }
 
-        em.close();
         JPAUtil.close();
     }
 }
