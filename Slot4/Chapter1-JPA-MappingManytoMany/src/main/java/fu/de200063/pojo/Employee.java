@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "employees")
@@ -36,6 +38,15 @@ public class Employee {
 
     @Column(nullable = false)
     private boolean active = true;
+
+    @ManyToMany
+    @JoinTable(
+            name = "employee_project",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    @ToString.Exclude
+    private Set<Project> projects = new HashSet<>();
 
     public Employee(String fullName, BigDecimal salary, LocalDate hireDate, String email, Gender gender) {
         this.fullName = fullName;
