@@ -58,6 +58,20 @@ public class Employee {
         this.active = true;
     }
 
+    public void assignToProject(Project p) {
+        if (p != null) {
+            this.projects.add(p);
+            p.getEmployees().add(this);
+        }
+    }
+
+    public void unassignFromProject(Project p) {
+        if (p != null) {
+            this.projects.remove(p);
+            p.getEmployees().remove(this);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
