@@ -43,6 +43,16 @@ public class ProjectDAO {
         }
     }
 
+    public List<Project> findAllWithEmployees() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery("SELECT DISTINCT p FROM Project p LEFT JOIN FETCH p.employees", Project.class)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
     public Project update(Project p) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
