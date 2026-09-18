@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "projects")
@@ -33,6 +35,10 @@ public class Project {
 
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    @ManyToMany(mappedBy = "projects")
+    @ToString.Exclude
+    private Set<Employee> employees = new HashSet<>();
 
     public Project(String projectCode, String projectName, BigDecimal budget, LocalDate startDate, LocalDate endDate) {
         this.projectCode = projectCode;
