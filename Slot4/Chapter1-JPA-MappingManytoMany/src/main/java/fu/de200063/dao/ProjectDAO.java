@@ -1,19 +1,18 @@
 package fu.de200063.dao;
 
-import fu.de200063.pojo.Employee;
 import fu.de200063.pojo.Project;
 import fu.de200063.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
-public class EmployeeDAO {
+public class ProjectDAO {
 
-    public void save(Employee e) {
+    public void save(Project p) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(e);
+            em.persist(p);
             em.getTransaction().commit();
         } catch (RuntimeException ex) {
             if (em.getTransaction().isActive()) {
@@ -25,30 +24,30 @@ public class EmployeeDAO {
         }
     }
 
-    public Employee findById(Long id) {
+    public Project findById(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return em.find(Employee.class, id);
+            return em.find(Project.class, id);
         } finally {
             em.close();
         }
     }
 
-    public List<Employee> findAll() {
+    public List<Project> findAll() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return em.createQuery("SELECT e FROM Employee e", Employee.class)
+            return em.createQuery("SELECT p FROM Project p", Project.class)
                     .getResultList();
         } finally {
             em.close();
         }
     }
 
-    public Employee update(Employee e) {
+    public Project update(Project p) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            Employee merged = em.merge(e);
+            Project merged = em.merge(p);
             em.getTransaction().commit();
             return merged;
         } catch (RuntimeException ex) {
@@ -65,29 +64,9 @@ public class EmployeeDAO {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            Employee e = em.find(Employee.class, id);
-            if (e != null) {
-                em.remove(e);
-            }
-            em.getTransaction().commit();
-        } catch (RuntimeException ex) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw ex;
-        } finally {
-            em.close();
-        }
-    }
-
-    public void assignEmployeeToProject(Long employeeId, Long projectId) {
-        EntityManager em = JPAUtil.getEntityManager();
-        try {
-            em.getTransaction().begin();
-            Employee e = em.find(Employee.class, employeeId);
-            Project p = em.find(Project.class, projectId);
-            if (e != null && p != null) {
-                e.assignToProject(p);
+            Project p = em.find(Project.class, id);
+            if (p != null) {
+                em.remove(p);
             }
             em.getTransaction().commit();
         } catch (RuntimeException ex) {
