@@ -1,29 +1,43 @@
 package fu.de200063;
 
-import fu.de200063.dao.DepartmentDAO;
-import fu.de200063.pojo.Department;
 import fu.de200063.pojo.Employee;
+import fu.de200063.pojo.Gender;
+import fu.de200063.pojo.Project;
 import fu.de200063.util.JPAUtil;
+import jakarta.persistence.EntityManager;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
-        DepartmentDAO departmentDAO = new DepartmentDAO();
+        System.out.println("========== TEST TODO 5.4: EQUALS VA HASHCODE ==========");
 
-        System.out.println("========== TODO 2.9: FIX N+1 QUERY VOI JOIN FETCH ==========");
+        Employee e1 = new Employee("Nguyen Van A", new BigDecimal("1500.00"), LocalDate.of(2023, 1, 15), "anv@company.com", Gender.MALE);
+        Employee e2 = new Employee("Nguyen Van A Khac", new BigDecimal("2000.00"), LocalDate.of(2024, 2, 20), "anv@company.com", Gender.MALE);
 
-        List<Department> departments = departmentDAO.findAllWithEmployees();
+        Set<Employee> employeeSet = new HashSet<>();
+        employeeSet.add(e1);
+        employeeSet.add(e2);
 
-        System.out.println(">> So luong phong ban lay duoc: " + departments.size());
+        System.out.println(">> So luong Employee trong Set (cung email): " + employeeSet.size());
+        System.out.println(">> e1.equals(e2): " + e1.equals(e2));
 
-        for (Department d : departments) {
-            System.out.println(">> Phong ban: " + d.getName() + " - So nhan vien: " + d.getEmployees().size());
-            for (Employee e : d.getEmployees()) {
-                System.out.println("   - " + e.getFullName() + " (" + e.getEmail() + ")");
-            }
-        }
+        Project p1 = new Project("PRJ-01", "Banking App", new BigDecimal("50000.00"), LocalDate.of(2024, 1, 1), null);
+        Project p2 = new Project("PRJ-01", "Banking App Version 2", new BigDecimal("80000.00"), LocalDate.of(2024, 6, 1), null);
 
+        Set<Project> projectSet = new HashSet<>();
+        projectSet.add(p1);
+        projectSet.add(p2);
+
+        System.out.println(">> So luong Project trong Set (cung projectCode): " + projectSet.size());
+        System.out.println(">> p1.equals(p2): " + p1.equals(p2));
+
+        EntityManager em = JPAUtil.getEntityManager();
+        System.out.println(">> Khoi tao EntityManager va tao bang thanh cong!");
+        em.close();
         JPAUtil.close();
     }
 }
