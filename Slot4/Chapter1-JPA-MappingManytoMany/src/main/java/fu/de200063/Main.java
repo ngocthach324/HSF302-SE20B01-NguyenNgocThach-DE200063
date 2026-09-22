@@ -16,7 +16,7 @@ public class Main {
         EmployeeDAO employeeDAO = new EmployeeDAO();
         ProjectDAO projectDAO = new ProjectDAO();
 
-        System.out.println("========== TODO 5.10: TIM NHAN VIEN THAM GIA > 1 PROJECT ==========");
+        System.out.println("========== TODO 5.11: DEACTIVATE EMPLOYEE (ACTIVE = FALSE) ==========");
 
         List<Project> projectList = projectDAO.findAll();
         List<Employee> employeeList = employeeDAO.findAll();
@@ -40,21 +40,24 @@ public class Main {
             employeeDAO.assignEmployeeToProject(e1.getId(), pB.getId());
             employeeDAO.assignEmployeeToProject(e2.getId(), pB.getId());
             employeeDAO.assignEmployeeToProject(e3.getId(), pA.getId());
-        } else {
-            Employee empA = employeeList.get(0);
-            Project prjA = projectList.get(0);
-            Project prjB = projectList.get(1);
-            employeeDAO.assignEmployeeToProject(empA.getId(), prjA.getId());
-            employeeDAO.assignEmployeeToProject(empA.getId(), prjB.getId());
+
+            employeeList = employeeDAO.findAll();
         }
 
-        List<Employee> multiProjectEmployees = employeeDAO.findActiveEmployeesInMultipleProjects();
-        System.out.println(">> So luong nhan vien active tham gia > 1 du an: " + multiProjectEmployees.size());
-        for (Employee emp : multiProjectEmployees) {
-            System.out.println(">> Nhan vien: " + emp.getFullName() + " (" + emp.getEmail() + ") - So du an: " + emp.getProjects().size());
-            for (Project proj : emp.getProjects()) {
-                System.out.println("   + " + proj.getProjectCode() + " - " + proj.getProjectName());
-            }
+        Employee empA = employeeList.get(0);
+        System.out.println(">> Thuc hien deactivate nhan vien: " + empA.getFullName() + " (ID: " + empA.getId() + ")");
+        employeeDAO.deactivateEmployee(empA.getId());
+
+        Employee updatedEmpA = employeeDAO.findById(empA.getId());
+        System.out.println(">> Trang thai active cua nhan vien sau khi deactivate: " + updatedEmpA.isActive());
+
+        System.out.println("\n--- THONG KE LAI DU AN CO NHAN VIEN ACTIVE ---");
+        List<Object[]> stats = projectDAO.getActiveEmployeeStatsByProject();
+        for (Object[] row : stats) {
+            String projectName = (String) row[0];
+            Long count = (Long) row[1];
+            BigDecimal totalSalary = (BigDecimal) row[2];
+            System.out.println(">> Du an: " + projectName + " | So NV active: " + count + " | Tong luong: " + totalSalary);
         }
 
         JPAUtil.close();

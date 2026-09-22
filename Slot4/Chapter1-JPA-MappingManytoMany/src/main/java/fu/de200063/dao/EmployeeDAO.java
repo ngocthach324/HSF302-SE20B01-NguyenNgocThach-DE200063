@@ -141,4 +141,23 @@ public class EmployeeDAO {
             em.close();
         }
     }
+
+    public void deactivateEmployee(Long employeeId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Employee e = em.find(Employee.class, employeeId);
+            if (e != null) {
+                e.setActive(false);
+            }
+            em.getTransaction().commit();
+        } catch (RuntimeException ex) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw ex;
+        } finally {
+            em.close();
+        }
+    }
 }
