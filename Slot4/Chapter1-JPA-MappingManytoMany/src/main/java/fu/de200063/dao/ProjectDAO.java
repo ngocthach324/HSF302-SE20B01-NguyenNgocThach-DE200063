@@ -53,6 +53,20 @@ public class ProjectDAO {
         }
     }
 
+    public List<Object[]> getActiveEmployeeStatsByProject() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT p.projectName, COUNT(e), SUM(e.salary) " +
+                    "FROM Project p JOIN p.employees e " +
+                    "WHERE e.active = true " +
+                    "GROUP BY p.projectName", Object[].class)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
     public Project update(Project p) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
