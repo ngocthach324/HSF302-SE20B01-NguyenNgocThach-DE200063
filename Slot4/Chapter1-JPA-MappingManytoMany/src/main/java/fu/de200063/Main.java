@@ -16,7 +16,7 @@ public class Main {
         EmployeeDAO employeeDAO = new EmployeeDAO();
         ProjectDAO projectDAO = new ProjectDAO();
 
-        System.out.println("========== TODO 5.9: UNASSIGN EMPLOYEE KHOI PROJECT ==========");
+        System.out.println("========== TODO 5.10: TIM NHAN VIEN THAM GIA > 1 PROJECT ==========");
 
         List<Project> projectList = projectDAO.findAll();
         List<Employee> employeeList = employeeDAO.findAll();
@@ -40,32 +40,20 @@ public class Main {
             employeeDAO.assignEmployeeToProject(e1.getId(), pB.getId());
             employeeDAO.assignEmployeeToProject(e2.getId(), pB.getId());
             employeeDAO.assignEmployeeToProject(e3.getId(), pA.getId());
-
-            projectList = projectDAO.findAll();
-            employeeList = employeeDAO.findAll();
+        } else {
+            Employee empA = employeeList.get(0);
+            Project prjA = projectList.get(0);
+            Project prjB = projectList.get(1);
+            employeeDAO.assignEmployeeToProject(empA.getId(), prjA.getId());
+            employeeDAO.assignEmployeeToProject(empA.getId(), prjB.getId());
         }
 
-        Employee empA = employeeList.get(0);
-        Project prjA = projectList.get(0);
-
-        System.out.println(">> Thuc hien unassign: Nhan vien " + empA.getFullName() + " khoi Du an " + prjA.getProjectName());
-        employeeDAO.unassignEmployeeFromProject(empA.getId(), prjA.getId());
-
-        System.out.println("\n--- DANH SACH PROJECT CUA NHAN VIEN SAU KHI UNASSIGN ---");
-        List<Employee> employees = employeeDAO.findAllWithProjects();
-        for (Employee emp : employees) {
-            System.out.println(">> Nhan vien: " + emp.getFullName() + " - So du an: " + emp.getProjects().size());
+        List<Employee> multiProjectEmployees = employeeDAO.findActiveEmployeesInMultipleProjects();
+        System.out.println(">> So luong nhan vien active tham gia > 1 du an: " + multiProjectEmployees.size());
+        for (Employee emp : multiProjectEmployees) {
+            System.out.println(">> Nhan vien: " + emp.getFullName() + " (" + emp.getEmail() + ") - So du an: " + emp.getProjects().size());
             for (Project proj : emp.getProjects()) {
                 System.out.println("   + " + proj.getProjectCode() + " - " + proj.getProjectName());
-            }
-        }
-
-        System.out.println("\n--- DANH SACH NHAN VIEN CUA TUNG PROJECT SAU KHI UNASSIGN ---");
-        List<Project> projects = projectDAO.findAllWithEmployees();
-        for (Project proj : projects) {
-            System.out.println(">> Du an: " + proj.getProjectName() + " - So thanh vien: " + proj.getEmployees().size());
-            for (Employee emp : proj.getEmployees()) {
-                System.out.println("   + " + emp.getFullName());
             }
         }
 

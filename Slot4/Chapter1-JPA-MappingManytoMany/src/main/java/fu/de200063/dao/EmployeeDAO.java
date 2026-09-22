@@ -54,6 +54,18 @@ public class EmployeeDAO {
         }
     }
 
+    public List<Employee> findActiveEmployeesInMultipleProjects() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT DISTINCT e FROM Employee e LEFT JOIN FETCH e.projects WHERE e.active = true AND SIZE(e.projects) > 1",
+                    Employee.class)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
     public Employee update(Employee e) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
