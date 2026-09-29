@@ -162,4 +162,16 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentSummary> getActiveSummaries() {
         return studentRepository.findActiveSummaries();
     }
+
+    @Override
+    public Page<Student> findActiveByDepartment(String deptCode, int pageIndex, int size) {
+        if (pageIndex < 0 || size <= 0) {
+            throw new IllegalArgumentException("pageIndex phai >= 0 va size phai > 0");
+        }
+        if (deptCode == null || deptCode.trim().isEmpty()) {
+            return Page.empty();
+        }
+        Pageable pageable = PageRequest.of(pageIndex, size, Sort.by("gpa").descending());
+        return studentRepository.findActiveByDepartment(deptCode.trim(), pageable);
+    }
 }
