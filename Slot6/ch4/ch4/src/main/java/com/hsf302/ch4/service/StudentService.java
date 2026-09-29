@@ -15,4 +15,10 @@ public interface StudentService {
     List<Student> findAllOrderByGpaDesc();
 
     Page<Student> findPage(int pageIndex, int size, String sortField);
+
+    Optional<Student> findByStudentCode(String code);
+
+    boolean isEmailExisted(String email);
+
+    long countActive();
 }

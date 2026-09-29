@@ -62,6 +62,24 @@ public class ExerciseRunner implements CommandLineRunner {
     }
 
     private void partC() {
+        todo8();
+    }
+
+    private void todo8() {
+        title("TODO 8: findBy / existsBy / countBy");
+
+        studentService.findByStudentCode("AI002").ifPresentOrElse(
+                s -> System.out.println("findByStudentCode(AI002) -> " + s),
+                () -> System.out.println("findByStudentCode(AI002) -> Not found"));
+
+        System.out.println("findByStudentCode(XX999) -> " + studentService.findByStudentCode("XX999")
+                .map(Object::toString)
+                .orElse("Not found"));
+
+        System.out.println("existsByEmail(binh.tt@fpt.edu.vn) -> "
+                + studentService.isEmailExisted("binh.tt@fpt.edu.vn"));
+
+        System.out.println("countByActiveTrue -> " + studentService.countActive());
     }
 
     private void partD() {
