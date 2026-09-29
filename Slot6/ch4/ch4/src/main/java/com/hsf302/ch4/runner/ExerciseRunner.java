@@ -127,6 +127,7 @@ public class ExerciseRunner implements CommandLineRunner {
         todo12();
         todo13();
         todo14();
+        todo15();
     }
 
     private void todo12() {
@@ -143,6 +144,11 @@ public class ExerciseRunner implements CommandLineRunner {
     private void todo14() {
         title("TODO 14: Thong ke department (LEFT JOIN + GROUP BY + DTO)");
         printList("Thong ke theo khoa", departmentService.getStatistics());
+    }
+
+    private void todo15() {
+        title("TODO 15: Subquery - GPA above average");
+        printList("GPA > AVG", studentService.findAboveAverageGpa());
     }
 
     private void bonus() {
