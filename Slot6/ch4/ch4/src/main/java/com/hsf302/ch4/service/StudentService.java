@@ -1,8 +1,10 @@
 package com.hsf302.ch4.service;
 
+import com.hsf302.ch4.pojo.Gender;
 import com.hsf302.ch4.pojo.Student;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +29,10 @@ public interface StudentService {
     List<Student> findByEmailDomain(String domain);
 
     List<Student> findWithoutEmail();
+
+    List<Student> findByGpaRange(double min, double max);
+
+    List<Student> findActiveByGender(Gender g);
+
+    List<Student> findBornAfter(LocalDate d);
 }
