@@ -63,6 +63,7 @@ public class ExerciseRunner implements CommandLineRunner {
 
     private void partC() {
         todo8();
+        todo9();
     }
 
     private void todo8() {
@@ -80,6 +81,17 @@ public class ExerciseRunner implements CommandLineRunner {
                 + studentService.isEmailExisted("binh.tt@fpt.edu.vn"));
 
         System.out.println("countByActiveTrue -> " + studentService.countActive());
+    }
+
+    private void todo9() {
+        title("TODO 9a: searchByName('nguyen')");
+        printList("Student co ten chua 'nguyen'", studentService.searchByName("nguyen"));
+
+        title("TODO 9b: findByEmailDomain('gmail.com')");
+        printList("Student dung email gmail", studentService.findByEmailDomain("gmail.com"));
+
+        title("TODO 9c: findWithoutEmail()");
+        printList("Student chua co email", studentService.findWithoutEmail());
     }
 
     private void partD() {
