@@ -132,4 +132,12 @@ public class StudentServiceImpl implements StudentService {
         }
         return studentRepository.findGoodStudentsInDepartment(deptCode.trim(), minGpa);
     }
+
+    @Override
+    public List<Student> searchByKeyword(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            return List.of();
+        }
+        return studentRepository.searchByKeyword(keyword.trim());
+    }
 }
