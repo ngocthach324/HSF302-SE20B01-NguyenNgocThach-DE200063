@@ -67,6 +67,7 @@ public class ExerciseRunner implements CommandLineRunner {
         todo8();
         todo9();
         todo10();
+        todo11();
     }
 
     private void todo8() {
@@ -106,6 +107,20 @@ public class ExerciseRunner implements CommandLineRunner {
 
         title("TODO 10c: findBornAfter(2005-01-01)");
         printList("Student sinh sau 2005-01-01", studentService.findBornAfter(LocalDate.of(2005, 1, 1)));
+    }
+
+    private void todo11() {
+        title("TODO 11a: findByDepartment('SE') - sort fullName asc");
+        printList("Student thuoc khoa SE", studentService.findByDepartment("SE"));
+
+        title("TODO 11b: countByDepartment('AI')");
+        System.out.println("So student khoa AI = " + studentService.countByDepartment("AI"));
+
+        title("TODO 11c: findTop3ByGpa()");
+        printList("Top 3 student GPA cao nhat", studentService.findTop3ByGpa());
+
+        title("TODO 11d: findDepartmentsWithoutStudents()");
+        printList("Department chua co student", departmentService.findDepartmentsWithoutStudents());
     }
 
     private void partD() {

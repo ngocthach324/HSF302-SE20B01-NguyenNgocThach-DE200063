@@ -103,4 +103,25 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> findBornAfter(LocalDate d) {
         return studentRepository.findByDobAfter(d);
     }
+
+    @Override
+    public List<Student> findByDepartment(String deptCode) {
+        if (deptCode == null || deptCode.trim().isEmpty()) {
+            return List.of();
+        }
+        return studentRepository.findByDepartment_CodeOrderByFullNameAsc(deptCode.trim());
+    }
+
+    @Override
+    public long countByDepartment(String deptCode) {
+        if (deptCode == null || deptCode.trim().isEmpty()) {
+            return 0;
+        }
+        return studentRepository.countByDepartment_Code(deptCode.trim());
+    }
+
+    @Override
+    public List<Student> findTop3ByGpa() {
+        return studentRepository.findTop3ByOrderByGpaDesc();
+    }
 }
