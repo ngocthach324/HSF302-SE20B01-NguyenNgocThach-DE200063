@@ -126,6 +126,7 @@ public class ExerciseRunner implements CommandLineRunner {
     private void partD() {
         todo12();
         todo13();
+        todo14();
     }
 
     private void todo12() {
@@ -137,6 +138,11 @@ public class ExerciseRunner implements CommandLineRunner {
         title("TODO 13: JPQL LIKE");
         printList("keyword 'hoa'", studentService.searchByKeyword("hoa"));
         printList("keyword 'gmail'", studentService.searchByKeyword("gmail"));
+    }
+
+    private void todo14() {
+        title("TODO 14: Thong ke department (LEFT JOIN + GROUP BY + DTO)");
+        printList("Thong ke theo khoa", departmentService.getStatistics());
     }
 
     private void bonus() {
