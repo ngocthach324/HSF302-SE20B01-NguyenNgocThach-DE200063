@@ -35,4 +35,7 @@ public interface EnrollmentService {
     List<EnrollmentView> getEnrollmentsOfDepartment(String deptCode);
 
     Page<Student> findStudentsInCoursePage(String courseCode, int pageIndex, int size);
+
+    void enroll(String studentCode, String courseCode);
 }
+
