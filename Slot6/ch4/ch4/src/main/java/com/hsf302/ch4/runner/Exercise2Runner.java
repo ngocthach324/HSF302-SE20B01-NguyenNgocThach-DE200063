@@ -11,6 +11,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 
 @Component
 @Order(3)
@@ -53,6 +54,17 @@ public class Exercise2Runner implements CommandLineRunner {
     }
 
     private void partC() {
+        todo8();
+    }
+
+    private void todo8() {
+        title("TODO 8: findByCode, findBySemester, countBySemester");
+        for (String code : List.of("HSF302", "XXX000")) {
+            System.out.println("(a) " + code + ": "
+                    + courseService.findByCode(code).map(Course::getName).orElse("Not found"));
+        }
+        printList("(b) Semester SU26", courseService.findBySemester("SU26"));
+        System.out.println("(c) Courses in FA26: " + courseService.countBySemester("FA26"));
     }
 
     private void partD() {
