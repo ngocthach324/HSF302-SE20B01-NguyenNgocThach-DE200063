@@ -1,5 +1,6 @@
 package com.hsf302.ch4.service;
 
+import com.hsf302.ch4.dto.StudentCreditDTO;
 import com.hsf302.ch4.pojo.Course;
 import com.hsf302.ch4.pojo.Student;
 
@@ -22,4 +23,6 @@ public interface EnrollmentService {
     boolean isEnrolled(String studentCode, String courseCode);
 
     List<Student> findGoodStudentsInCourse(String courseCode, double minGpa);
+
+    List<StudentCreditDTO> getCreditSummary(int minCredits);
 }
