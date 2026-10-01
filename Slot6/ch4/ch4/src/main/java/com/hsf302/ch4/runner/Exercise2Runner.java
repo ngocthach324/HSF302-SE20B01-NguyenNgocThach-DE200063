@@ -93,6 +93,12 @@ public class Exercise2Runner implements CommandLineRunner {
     }
 
     private void partD() {
+        todo12();
+    }
+
+    private void todo12() {
+        title("TODO 12: JPQL JOIN s.courses");
+        printList("HSF302 & GPA >= 3.5", enrollmentService.findGoodStudentsInCourse("HSF302", 3.5));
     }
 
     private void bonus() {
