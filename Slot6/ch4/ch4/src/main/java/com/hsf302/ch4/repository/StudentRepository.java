@@ -84,4 +84,10 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
     int transferStudents(@Param("from") Department from, @Param("to") Department to);
 
     long deleteByActiveFalse();
+
+    List<Student> findByCourses_CodeOrderByFullNameAsc(String courseCode);
+
+    long countByCourses_Code(String courseCode);
+
+    List<Student> findByCourses_CodeAndActiveTrueOrderByFullNameAsc(String courseCode);
 }
