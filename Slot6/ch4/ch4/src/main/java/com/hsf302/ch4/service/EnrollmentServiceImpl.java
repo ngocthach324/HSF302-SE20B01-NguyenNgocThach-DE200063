@@ -77,6 +77,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         return studentRepository.getCreditSummary(minCredits);
     }
 
+    @Override
+    public List<Student> findStudentsWithMoreThan(int n) {
+        if (n < 0) {
+            throw new IllegalArgumentException("n must be >= 0");
+        }
+        return studentRepository.findStudentsWithMoreThanNCourses(n);
+    }
+
     private Student getStudent(String studentCode) {
         if (studentCode == null || studentCode.isBlank()) {
             throw new IllegalArgumentException("Student code must not be blank");
