@@ -6,11 +6,13 @@ import com.hsf302.ch4.pojo.Course;
 import com.hsf302.ch4.pojo.Student;
 import com.hsf302.ch4.repository.CourseRepository;
 import com.hsf302.ch4.repository.StudentRepository;
+import com.hsf302.ch4.specification.EnrollmentSpecs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -165,6 +167,15 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Transactional
     public int removeEnrollmentsOfInactiveStudents() {
         return studentRepository.deleteEnrollmentsOfInactiveStudents();
+    }
+
+    @Override
+    public List<Student> search(String courseCode, String semester, String deptCode, Double minGpa) {
+        Specification<Student> spec = Specification.where(EnrollmentSpecs.enrolledIn(courseCode))
+                .and(EnrollmentSpecs.inSemester(semester))
+                .and(EnrollmentSpecs.inDepartment(deptCode))
+                .and(EnrollmentSpecs.gpaAtLeast(minGpa));
+        return studentRepository.findAll(spec, Sort.by("fullName"));
     }
 
     private Student getStudent(String studentCode) {
