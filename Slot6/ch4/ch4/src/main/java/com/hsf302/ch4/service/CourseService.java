@@ -36,5 +36,11 @@ public interface CourseService {
     List<CourseEnrollmentCount> findTopEnrolled(int n);
 
     List<Course> searchByName(String keyword);
+
+    List<Course> findByCreditRange(int minCredits, int maxCredits);
+
+    List<Course> findByCreditRangeCustom(int minCredits, int maxCredits);
+
+    long countByCreditsGreaterThan(int credits);
 }
 

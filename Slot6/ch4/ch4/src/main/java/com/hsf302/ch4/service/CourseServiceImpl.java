@@ -95,7 +95,32 @@ public class CourseServiceImpl implements CourseService {
         if (keyword == null || keyword.isBlank()) {
             throw new IllegalArgumentException("Keyword must not be blank");
         }
-        return courseRepository.findByNameContainingIgnoreCase(keyword);
+        return courseRepository.searchByNameCustom(keyword);
+    }
+
+    @Override
+    public List<Course> findByCreditRange(int minCredits, int maxCredits) {
+        if (minCredits < 0 || maxCredits < minCredits) {
+            throw new IllegalArgumentException("Invalid credit range: min must be >= 0 and min <= max");
+        }
+        return courseRepository.findByCreditsBetweenOrderByCreditsAscCodeAsc(minCredits, maxCredits);
+    }
+
+    @Override
+    public List<Course> findByCreditRangeCustom(int minCredits, int maxCredits) {
+        if (minCredits < 0 || maxCredits < minCredits) {
+            throw new IllegalArgumentException("Invalid credit range: min must be >= 0 and min <= max");
+        }
+        return courseRepository.findCoursesByCreditRangeCustom(minCredits, maxCredits);
+    }
+
+    @Override
+    public long countByCreditsGreaterThan(int credits) {
+        if (credits < 0) {
+            throw new IllegalArgumentException("credits must be >= 0");
+        }
+        return courseRepository.countByCreditsGreaterThan(credits);
     }
 }
+
 

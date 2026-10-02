@@ -231,8 +231,11 @@ public class Exercise2Runner implements CommandLineRunner {
     }
 
     private void todoTask() {
-        title("TODO Task: search courses with name containing 'L'");
-        printList("Courses with name containing 'L'", courseService.searchByName("L"));
+        title("TODO Task: search courses and count by credits");
+        printList("Courses with name containing 'ing' (custom query)", courseService.searchByName("ing"));
+        System.out.println("Courses with credits > 3: " + courseService.countByCreditsGreaterThan(3));
+        printList("Courses with 3 to 4 credits (derived query)", courseService.findByCreditRange(3, 4));
+        printList("Courses with 3 to 4 credits (custom query)", courseService.findByCreditRangeCustom(3, 4));
     }
 
     private void title(String t) {
