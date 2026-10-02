@@ -3,14 +3,17 @@ package com.hsf302.ch4.service;
 import com.hsf302.ch4.dto.CourseEnrollmentCount;
 import com.hsf302.ch4.dto.CourseStatDTO;
 import com.hsf302.ch4.pojo.Course;
+import com.hsf302.ch4.pojo.Student;
 import com.hsf302.ch4.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -120,6 +123,29 @@ public class CourseServiceImpl implements CourseService {
             throw new IllegalArgumentException("credits must be >= 0");
         }
         return courseRepository.countByCreditsGreaterThan(credits);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCourseDirectly(String code) {
+        Course c = getCourse(code);
+        courseRepository.delete(c);
+        courseRepository.flush();
+    }
+
+    @Override
+    @Transactional
+    public int deleteCourse(String code) {
+        Course c = getCourse(code);
+        Set<Student> students = new HashSet<>(c.getStudents());
+        students.forEach(s -> s.unenroll(c));
+        courseRepository.delete(c);
+        return students.size();
+    }
+
+    private Course getCourse(String code) {
+        return courseRepository.findByCode(code)
+                .orElseThrow(() -> new IllegalArgumentException("Course not found: " + code));
     }
 }
 

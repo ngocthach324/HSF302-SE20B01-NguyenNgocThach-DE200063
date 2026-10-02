@@ -42,5 +42,10 @@ public interface CourseService {
     List<Course> findByCreditRangeCustom(int minCredits, int maxCredits);
 
     long countByCreditsGreaterThan(int credits);
+
+    void deleteCourseDirectly(String code);
+
+    int deleteCourse(String code);
 }
+
 
