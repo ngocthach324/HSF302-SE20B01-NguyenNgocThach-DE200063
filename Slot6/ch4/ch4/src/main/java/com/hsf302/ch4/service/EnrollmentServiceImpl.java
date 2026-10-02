@@ -161,6 +161,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         checkAndEnroll(s, to);
     }
 
+    @Override
+    @Transactional
+    public int removeEnrollmentsOfInactiveStudents() {
+        return studentRepository.deleteEnrollmentsOfInactiveStudents();
+    }
+
     private Student getStudent(String studentCode) {
         if (studentCode == null || studentCode.isBlank()) {
             throw new IllegalArgumentException("Student code must not be blank");
