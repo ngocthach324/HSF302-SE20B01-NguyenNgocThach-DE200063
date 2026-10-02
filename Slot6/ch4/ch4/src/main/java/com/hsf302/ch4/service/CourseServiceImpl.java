@@ -89,4 +89,13 @@ public class CourseServiceImpl implements CourseService {
         }
         return courseRepository.findTopEnrolledNative(n);
     }
+
+    @Override
+    public List<Course> searchByName(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            throw new IllegalArgumentException("Keyword must not be blank");
+        }
+        return courseRepository.findByNameContainingIgnoreCase(keyword);
+    }
 }
+

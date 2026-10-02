@@ -34,4 +34,7 @@ public interface CourseService {
     Course getWithStudents(String code);
 
     List<CourseEnrollmentCount> findTopEnrolled(int n);
+
+    List<Course> searchByName(String keyword);
 }
+

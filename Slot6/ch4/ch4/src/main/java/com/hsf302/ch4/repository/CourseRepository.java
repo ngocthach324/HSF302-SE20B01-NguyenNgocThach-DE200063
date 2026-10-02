@@ -44,4 +44,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             "ORDER BY enrolled DESC, c.code",
             nativeQuery = true)
     List<CourseEnrollmentCount> findTopEnrolledNative(@Param("n") int n);
+
+    List<Course> findByNameContainingIgnoreCase(String keyword);
 }
+

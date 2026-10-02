@@ -34,6 +34,7 @@ public class Exercise2Runner implements CommandLineRunner {
         partD();
         bonus();
         partE();
+        todoTask();
     }
 
     private void partB() {
@@ -227,6 +228,11 @@ public class Exercise2Runner implements CommandLineRunner {
         attempt("switch SE001 PRJ301 -> AIL303",
                 () -> enrollmentService.switchCourse("SE001", "PRJ301", "AIL303"));
         printList("Courses of SE001 (after rollback)", enrollmentService.getCoursesOfStudent("SE001"));
+    }
+
+    private void todoTask() {
+        title("TODO Task: search courses with name containing 'L'");
+        printList("Courses with name containing 'L'", courseService.searchByName("L"));
     }
 
     private void title(String t) {
