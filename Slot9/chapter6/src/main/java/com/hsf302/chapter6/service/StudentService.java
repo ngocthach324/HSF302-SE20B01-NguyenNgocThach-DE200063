@@ -20,4 +20,6 @@ public interface StudentService {
     boolean isEmailTaken(String email, Long excludeId);
 
     List<String> getMajors();
+
+    List<Student> search(String keyword);
 }

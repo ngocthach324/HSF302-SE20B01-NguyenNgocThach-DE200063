@@ -14,13 +14,26 @@
         </a>
     </div>
 
+    <form th:action="@{/students}" method="get" class="row g-2 mb-3">
+        <div class="col-md-5">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="Tìm theo tên hoặc email..."/>
+            </div>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-outline-primary">Tìm kiếm</button>
+            <a th:if="${keyword != null and !keyword.isBlank()}" th:href="@{/students}" class="btn btn-outline-secondary">Xóa tìm kiếm</a>
+        </div>
+    </form>
+
     <div class="card shadow-sm">
         <div class="card-body p-0">
 
             <div th:if="${#lists.isEmpty(students)}" class="text-center p-5 text-muted">
                 <i class="bi bi-inbox display-4"></i>
-                <p class="mt-2">Chưa có sinh viên nào.</p>
-                <a th:href="@{/students/create}" class="btn btn-outline-primary">Thêm ngay</a>
+                <p class="mt-2">Không tìm thấy sinh viên nào.</p>
+                <a th:href="@{/students}" class="btn btn-outline-primary">Xem tất cả</a>
             </div>
 
             <table th:unless="${#lists.isEmpty(students)}" class="table table-hover mb-0">
