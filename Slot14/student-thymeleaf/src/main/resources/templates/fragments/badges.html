@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- TODO MỞ RỘNG (G4): Fragment hiển thị badge xếp loại học lực -->
+<span th:fragment="rank(rank)" th:switch="${rank}">
+    <span th:case="'Xuất sắc'"   class="badge text-bg-success" th:text="${rank}"></span>
+    <span th:case="'Giỏi'"       class="badge text-bg-primary" th:text="${rank}"></span>
+    <span th:case="'Khá'"        class="badge text-bg-info"    th:text="${rank}"></span>
+    <span th:case="'Trung bình'" class="badge text-bg-warning" th:text="${rank}"></span>
+    <span th:case="*"            class="badge text-bg-danger"  th:text="${rank}"></span>
+</span>
+
+<!-- TODO MỞ RỘNG (G4): Fragment hiển thị badge trạng thái sinh viên -->
+<span th:fragment="status(active)" class="badge"
+      th:classappend="${active} ? 'text-bg-success' : 'text-bg-secondary'"
+      th:text="${active} ? 'Đang học' : 'Bảo lưu'">Đang học</span>
+
+</body>
+</html>

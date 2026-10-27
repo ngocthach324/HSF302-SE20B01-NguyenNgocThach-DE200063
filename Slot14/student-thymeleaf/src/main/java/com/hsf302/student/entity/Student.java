@@ -1,5 +1,6 @@
 package com.hsf302.student.entity;
 
+import com.hsf302.student.validation.UniqueStudentCode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.Nationalized;
@@ -9,6 +10,8 @@ import java.time.LocalDate;
 import java.time.Period;
 
 // TODO 18: Ánh xạ entity với bảng SQL Server
+// TODO MỞ RỘNG (G7): Custom Bean Validation Annotation kiểm tra trùng mã sinh viên
+@UniqueStudentCode
 @Entity
 @Table(name = "Students")
 public class Student {

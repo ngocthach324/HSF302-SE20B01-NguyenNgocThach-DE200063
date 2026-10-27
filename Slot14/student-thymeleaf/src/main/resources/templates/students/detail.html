@@ -12,10 +12,8 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <!-- TODO 14.1: Tiêu đề "<studentCode> - <fullName>" bằng literal substitution -->
             <h4 class="mb-0" th:text="|${student.studentCode} - ${student.fullName}|">SE180001 - Nguyễn Văn A</h4>
-            <!-- TODO 14.2: Badge trạng thái: th:classappend + ternary -->
-            <span class="badge"
-                  th:classappend="${student.active} ? 'text-bg-success' : 'text-bg-secondary'"
-                  th:text="${student.active} ? 'Đang học' : 'Bảo lưu'">Đang học</span>
+            <!-- TODO 14.2 & TODO MỞ RỘNG (G4): Badge trạng thái dùng fragment tái sử dụng -->
+            <span th:replace="~{fragments/badges :: status(active=${student.active})}"></span>
         </div>
         <div class="card-body">
             <!-- TODO 14.3: Hiển thị chi tiết các trường -->
@@ -48,7 +46,10 @@
                 <dd class="col-sm-9" th:text="${#numbers.formatDecimal(student.gpa, 1, 2)} + ' / 10'">8.00 / 10</dd>
 
                 <dt class="col-sm-3">Xếp loại</dt>
-                <dd class="col-sm-9" th:text="${student.rank}">Giỏi</dd>
+                <dd class="col-sm-9">
+                    <!-- TODO MỞ RỘNG (G4): Badge xếp loại dùng fragment tái sử dụng -->
+                    <span th:replace="~{fragments/badges :: rank(rank=${student.rank})}"></span>
+                </dd>
 
                 <dt class="col-sm-3">Học bổng</dt>
                 <dd class="col-sm-9"

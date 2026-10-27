@@ -15,29 +15,40 @@
         <a th:href="@{/students/new}" class="btn btn-primary">+ Thêm sinh viên</a>
     </div>
 
-    <!-- TODO 9.3: Form tìm kiếm GET tới /students; ô input name="keyword" giữ lại giá trị ${keyword} -->
+    <!-- TODO 9.3 & TODO MỞ RỘNG (G2): Form tìm kiếm + Lọc theo ngành -->
     <form th:action="@{/students}" method="get" class="row g-2 mb-3">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <input type="text" name="keyword" class="form-control"
                    placeholder="Tìm theo mã SV hoặc họ tên..."
                    th:value="${keyword}">
         </div>
+        <div class="col-md-3">
+            <select name="major" class="form-select" onchange="this.form.submit()">
+                <option value="">-- Tất cả ngành --</option>
+                <option th:each="m : ${majors}"
+                        th:value="${m.key}"
+                        th:text="|${m.key} - ${m.value}|"
+                        th:selected="${m.key == selectedMajor}"></option>
+            </select>
+        </div>
+        <input type="hidden" name="sort" th:value="${sortField}">
+        <input type="hidden" name="dir" th:value="${sortDir}">
         <div class="col-auto">
             <button type="submit" class="btn btn-outline-primary">Tìm kiếm</button>
         </div>
-        <div class="col-auto" th:unless="${#strings.isEmpty(keyword)}">
+        <div class="col-auto" th:if="${not #strings.isEmpty(keyword) or not #strings.isEmpty(selectedMajor)}">
             <a th:href="@{/students}" class="btn btn-outline-secondary">Xóa lọc</a>
         </div>
     </form>
 
-    <!-- TODO 9.4: Thông báo số lượng kết quả tìm kiếm -->
-    <p class="text-muted" th:unless="${#strings.isEmpty(keyword)}"
-       th:text="|Tìm thấy ${totalStudents} sinh viên cho từ khóa: ${keyword}|">
+    <!-- TODO 9.4: Thông báo kết quả tìm kiếm -->
+    <p class="text-muted" th:unless="${#strings.isEmpty(keyword) and #strings.isEmpty(selectedMajor)}"
+       th:text="|Tìm thấy ${totalStudents} sinh viên phù hợp điều kiện lọc|">
         Tìm thấy 1 sinh viên cho từ khóa: abc
     </p>
 
-    <!-- TODO 10: 3 thẻ thống kê -->
-    <div class="row g-3 mb-4">
+    <!-- TODO 10: 3 thẻ thống kê tổng quan -->
+    <div class="row g-3 mb-3">
         <div class="col-md-4">
             <div class="card stat-card text-bg-primary"><div class="card-body">
                 <div>Tổng số sinh viên</div>
@@ -58,9 +69,38 @@
         </div>
     </div>
 
+    <!-- TODO MỞ RỘNG (G6, G8): Bảng thống kê theo từng ngành bằng JPQL Query -->
+    <div class="card mb-4 shadow-sm" th:if="${not #lists.isEmpty(majorStats)}">
+        <div class="card-header bg-light py-2">
+            <strong class="text-secondary">📊 Thống kê sinh viên theo chuyên ngành (JPQL Group By)</strong>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Mã ngành</th>
+                        <th>Chuyên ngành</th>
+                        <th>Số lượng SV</th>
+                        <th>GPA trung bình</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="st : ${majorStats}">
+                        <td><span class="badge text-bg-dark" th:text="${st.major}">SE</span></td>
+                        <td th:text="${st.majorName}">Kỹ thuật phần mềm</td>
+                        <td><span class="badge text-bg-primary" th:text="${st.studentCount}">0</span></td>
+                        <td class="fw-bold text-success" th:text="${#numbers.formatDecimal(st.averageGpa, 1, 2)}">0.00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <!-- TODO 13.1: Thông báo nếu danh sách rỗng -->
     <div th:if="${#lists.isEmpty(students)}" class="alert alert-warning">
-        Không có sinh viên nào.
+        Không có sinh viên nào phù hợp điều kiện.
     </div>
 
     <!-- Bảng danh sách sinh viên -->
@@ -68,8 +108,33 @@
         <table class="table table-bordered table-hover align-middle bg-white">
             <thead class="table-dark">
             <tr>
-                <th>#</th><th>Mã SV</th><th>Họ tên</th><th>Email</th><th>Ngày sinh</th>
-                <th>Tuổi</th><th>Ngành</th><th>GPA</th><th>Xếp loại</th><th>Trạng thái</th><th>Thao tác</th>
+                <th>#</th>
+                <!-- TODO MỞ RỘNG (G1): Click tiêu đề cột để sắp xếp và tô mũi tên ▲▼ -->
+                <th>
+                    <a th:href="@{/students(keyword=${keyword}, major=${selectedMajor}, sort='studentCode', dir=${sortField == 'studentCode' ? reverseDir : 'asc'})}"
+                       class="text-white text-decoration-none">
+                        Mã SV <span th:if="${sortField == 'studentCode'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{/students(keyword=${keyword}, major=${selectedMajor}, sort='fullName', dir=${sortField == 'fullName' ? reverseDir : 'asc'})}"
+                       class="text-white text-decoration-none">
+                        Họ tên <span th:if="${sortField == 'fullName'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span>
+                    </a>
+                </th>
+                <th>Email</th>
+                <th>Ngày sinh</th>
+                <th>Tuổi</th>
+                <th>Ngành</th>
+                <th>
+                    <a th:href="@{/students(keyword=${keyword}, major=${selectedMajor}, sort='gpa', dir=${sortField == 'gpa' ? reverseDir : 'asc'})}"
+                       class="text-white text-decoration-none">
+                        GPA <span th:if="${sortField == 'gpa'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span>
+                    </a>
+                </th>
+                <th>Xếp loại</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
             </tr>
             </thead>
             <tbody>
@@ -77,24 +142,20 @@
             <tr th:each="s, stat : ${students}"
                 th:classappend="${s.gpa lt 5} ? 'table-danger'">
                 <td th:text="${stat.count}">1</td>
-                <td th:text="${s.studentCode}">SE180001</td>
+                <td class="fw-bold" th:text="${s.studentCode}">SE180001</td>
                 <td th:text="${#strings.toUpperCase(s.fullName)}">NGUYỄN VĂN A</td>
                 <td th:text="${s.email}">a@fpt.edu.vn</td>
                 <td th:text="${#temporals.format(s.dateOfBirth, 'dd/MM/yyyy')}">01/01/2004</td>
                 <td th:text="${s.age}">22</td>
                 <td th:text="${majors[s.major]}">Kỹ thuật phần mềm</td>
-                <td th:text="${#numbers.formatDecimal(s.gpa, 1, 2)}">8.00</td>
-                <td th:switch="${s.rank}">
-                    <span th:case="'Xuất sắc'"   class="badge text-bg-success" th:text="${s.rank}"></span>
-                    <span th:case="'Giỏi'"       class="badge text-bg-primary" th:text="${s.rank}"></span>
-                    <span th:case="'Khá'"        class="badge text-bg-info"    th:text="${s.rank}"></span>
-                    <span th:case="'Trung bình'" class="badge text-bg-warning" th:text="${s.rank}"></span>
-                    <span th:case="*"            class="badge text-bg-danger"  th:text="${s.rank}"></span>
-                </td>
+                <td class="fw-bold" th:text="${#numbers.formatDecimal(s.gpa, 1, 2)}">8.00</td>
+                <!-- TODO MỞ RỘNG (G4): Tái sử dụng Thymeleaf Fragment xếp loại -->
                 <td>
-                    <span class="badge"
-                          th:classappend="${s.active} ? 'text-bg-success' : 'text-bg-secondary'"
-                          th:text="${s.active} ? 'Đang học' : 'Bảo lưu'">Đang học</span>
+                    <span th:replace="~{fragments/badges :: rank(rank=${s.rank})}"></span>
+                </td>
+                <!-- TODO MỞ RỘNG (G4): Tái sử dụng Thymeleaf Fragment trạng thái -->
+                <td>
+                    <span th:replace="~{fragments/badges :: status(active=${s.active})}"></span>
                 </td>
                 <!-- TODO 13.2: Các nút Xem / Sửa / Xóa -->
                 <td class="text-nowrap">

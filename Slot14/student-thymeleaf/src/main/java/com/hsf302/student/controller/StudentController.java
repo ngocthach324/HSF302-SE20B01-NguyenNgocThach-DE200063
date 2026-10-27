@@ -34,14 +34,23 @@ public class StudentController {
         return majors;
     }
 
-    // TODO 4: GET /students?keyword=...
+    // TODO 4 & TODO MỞ RỘNG (G1, G2, G6, G8): GET /students có tìm kiếm, lọc ngành, sắp xếp và thống kê JPQL
     @GetMapping
-    public String list(@RequestParam(required = false) String keyword, Model model) {
-        List<Student> students = studentService.search(keyword);
+    public String list(@RequestParam(required = false) String keyword,
+                       @RequestParam(required = false) String major,
+                       @RequestParam(required = false, defaultValue = "id") String sort,
+                       @RequestParam(required = false, defaultValue = "asc") String dir,
+                       Model model) {
+        List<Student> students = studentService.searchAndFilter(keyword, major, sort, dir);
         model.addAttribute("students", students);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("selectedMajor", major);
+        model.addAttribute("sortField", sort);
+        model.addAttribute("sortDir", dir);
+        model.addAttribute("reverseDir", "asc".equalsIgnoreCase(dir) ? "desc" : "asc");
         model.addAttribute("totalStudents", students.size());
         model.addAttribute("avgGpa", studentService.averageGpa(students));
+        model.addAttribute("majorStats", studentService.getMajorStats(majors()));
         model.addAttribute("activeMenu", "list");
         return "students/list";
     }
@@ -86,7 +95,8 @@ public class StudentController {
                        Model model,
                        RedirectAttributes ra) {
 
-        if (studentService.isStudentCodeDuplicated(student.getStudentCode(), student.getId())) {
+        // TODO 7 & TODO MỞ RỘNG (G7): Đã có @UniqueStudentCode tự động kiểm tra, bổ sung check an toàn
+        if (!result.hasFieldErrors("studentCode") && studentService.isStudentCodeDuplicated(student.getStudentCode(), student.getId())) {
             result.rejectValue("studentCode", "duplicate", "Mã sinh viên đã tồn tại");
         }
 
