@@ -11,4 +11,7 @@ module edu.fpt.swt301.demo {
     exports com.fu.ch08.b1;
     exports com.fu.ch08.b2;
     exports com.fu.ch08.b3;
+
+    opens com.fu.ch08.b4 to javafx.fxml;
+    exports com.fu.ch08.b4;
 }
