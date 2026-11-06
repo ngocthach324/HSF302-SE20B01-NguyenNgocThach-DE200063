@@ -17,3 +17,4 @@ public class GlobalExceptionHandler {
         return "error-page";
     }
 }
+
