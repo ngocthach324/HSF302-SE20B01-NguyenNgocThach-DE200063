@@ -99,3 +99,4 @@ public class DeviceDTO {
         this.status = status;
     }
 }
+

@@ -26,3 +26,4 @@ public interface DeviceService {
     // Q2.2 - delete a device; throws IllegalStateException when device status is Active (AC)
     void deleteDevice(Integer id);
 }
+
