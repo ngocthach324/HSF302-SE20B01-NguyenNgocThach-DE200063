@@ -104,3 +104,4 @@ public class Device {
         this.status = status;
     }
 }
+
