@@ -17,3 +17,4 @@ public interface DeviceRepository extends JpaRepository<Device, Integer> {
     // Q3 Screen Definition #1 - Device Code must be unique
     Optional<Device> findByDeviceCode(String deviceCode);
 }
+
